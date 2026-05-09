@@ -4,9 +4,7 @@ import { Home } from './pages/Home';
 import { CategoryPage } from './pages/CategoryPage';
 import { ArticleDetail } from './pages/ArticleDetail';
 import { SearchPage } from './pages/SearchPage';
-import { AdminRoot } from './pages/admin/AdminRoot';
-import { AdminDashboard } from './pages/admin/AdminDashboard';
-import { AdminEditor } from './pages/admin/AdminEditor';
+import { AdminEntry } from './pages/AdminEntry';
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +15,7 @@ export const router = createBrowserRouter([
       { path: 'category/:category', Component: CategoryPage },
       { path: 'article/:id', Component: ArticleDetail },
       { path: 'search', Component: SearchPage },
+      { path: 'admin', Component: AdminEntry },
       {
         path: '*',
         Component: () => {
@@ -42,16 +41,6 @@ export const router = createBrowserRouter([
           );
         },
       },
-    ],
-  },
-  // ── Admin (별도 레이아웃, 공개 헤더 없음) ──
-  {
-    path: '/admin',
-    Component: AdminRoot,
-    children: [
-      { index: true, Component: AdminDashboard },
-      { path: 'editor', Component: AdminEditor },
-      { path: 'editor/:id', Component: AdminEditor },
     ],
   },
 ]);

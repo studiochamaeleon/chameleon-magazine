@@ -13,6 +13,7 @@ export interface Article {
   author: string;
   coverImage: string;
   body: string;
+  bodyBlocks?: unknown[];
   relatedArticles?: string[];
   status?: 'published' | 'draft' | 'scheduled';
   scheduledAt?: string; // ISO datetime string (예약발행 시각)

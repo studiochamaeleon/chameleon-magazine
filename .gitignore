@@ -1,5 +1,6 @@
 node_modules/
 dist/
+studio/.sanity/
 .DS_Store
 *.local
 .env

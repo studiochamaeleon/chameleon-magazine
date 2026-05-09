@@ -1,20 +1,137 @@
+import { useEffect, useState } from 'react';
+import { PortableText } from '@portabletext/react';
 import { useParams, Link } from 'react-router';
 import { ArrowLeft, Calendar, Tag } from 'lucide-react';
 import { useArticles } from '../context/ArticleContext';
 import { ArticleCard } from '../components/ArticleCard';
 import { CategoryLabel, EditorPickLabel } from '../components/CategoryLabel';
 import { CATEGORY_CONFIGS, Category } from '../data/categories';
+import { urlFor } from '../lib/sanityClient';
 import ChameleonIcon from '../../imports/______2.svg';
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
+function getYouTubeEmbedUrl(url: string) {
+  try {
+    const parsed = new URL(url);
+    const videoId = parsed.hostname.includes('youtu.be')
+      ? parsed.pathname.slice(1)
+      : parsed.searchParams.get('v');
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+  } catch {
+    return null;
+  }
+}
+
+const portableTextComponents = {
+  types: {
+    image: ({ value }: { value: { alt?: string; caption?: string } }) => (
+      <figure className="my-8">
+        <img
+          src={urlFor(value).width(1400).auto('format').url()}
+          alt={value.alt ?? ''}
+          className="w-full"
+        />
+        {value.caption && (
+          <figcaption className="mt-2 text-gray-500" style={{ fontSize: '0.78rem' }}>
+            {value.caption}
+          </figcaption>
+        )}
+      </figure>
+    ),
+    youtube: ({ value }: { value: { url?: string; caption?: string } }) => {
+      const embedUrl = value.url ? getYouTubeEmbedUrl(value.url) : null;
+      if (!embedUrl) return null;
+
+      return (
+        <figure className="my-8">
+          <div className="w-full overflow-hidden bg-black" style={{ aspectRatio: '16/9' }}>
+            <iframe
+              src={embedUrl}
+              title={value.caption ?? 'YouTube video'}
+              className="w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </div>
+          {value.caption && (
+            <figcaption className="mt-2 text-gray-500" style={{ fontSize: '0.78rem' }}>
+              {value.caption}
+            </figcaption>
+          )}
+        </figure>
+      );
+    },
+  },
+  block: {
+    h2: ({ children }: { children?: React.ReactNode }) => (
+      <h2 className="mt-10 mb-4 leading-tight" style={{ fontFamily: 'var(--font-headline)', fontSize: '1.55rem', fontWeight: 800 }}>
+        {children}
+      </h2>
+    ),
+    h3: ({ children }: { children?: React.ReactNode }) => (
+      <h3 className="mt-8 mb-3 leading-tight" style={{ fontFamily: 'var(--font-headline)', fontSize: '1.2rem', fontWeight: 800 }}>
+        {children}
+      </h3>
+    ),
+    blockquote: ({ children }: { children?: React.ReactNode }) => (
+      <blockquote className="my-6 border-l-4 border-black pl-4 text-gray-700">
+        {children}
+      </blockquote>
+    ),
+    normal: ({ children }: { children?: React.ReactNode }) => (
+      <p className="mb-5 leading-relaxed" style={{ fontSize: '1rem' }}>
+        {children}
+      </p>
+    ),
+  },
+  marks: {
+    link: ({ children, value }: { children?: React.ReactNode; value?: { href?: string } }) => (
+      <a href={value?.href} target="_blank" rel="noreferrer" className="underline decoration-2 underline-offset-2">
+        {children}
+      </a>
+    ),
+  },
+};
+
 export function ArticleDetail() {
   const { id } = useParams<{ id: string }>();
   const { getArticleById, articles } = useArticles();
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const article = id ? getArticleById(id) : undefined;
+
+  useEffect(() => {
+    let animationFrame = 0;
+
+    const updateProgress = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const nextProgress = scrollable > 0 ? window.scrollY / scrollable : 0;
+      setScrollProgress(Math.min(Math.max(nextProgress, 0), 1));
+    };
+
+    const handleScroll = () => {
+      if (animationFrame) return;
+      animationFrame = window.requestAnimationFrame(() => {
+        updateProgress();
+        animationFrame = 0;
+      });
+    };
+
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    setScrollProgress(0);
+    updateProgress();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+    };
+  }, [id]);
 
   if (!article) {
     return (
@@ -36,7 +153,21 @@ export function ArticleDetail() {
     .slice(0, 3) as typeof articles;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 md:px-6 py-8">
+    <>
+      <div
+        className="fixed left-0 right-0 top-0 z-50 h-1 pointer-events-none"
+        aria-hidden="true"
+      >
+        <div
+          className="h-full origin-left transition-transform duration-100 ease-linear"
+          style={{
+            backgroundColor: accentColor,
+            transform: `scaleX(${scrollProgress})`,
+          }}
+        />
+      </div>
+
+      <div className="max-w-3xl mx-auto px-4 md:px-6 py-8">
       {/* Back */}
       <Link
         to={catConfig ? `/category/${article.category}` : '/'}
@@ -115,11 +246,13 @@ export function ArticleDetail() {
       )}
 
       {/* Body */}
-      <div
-        className="article-body text-black"
-        dangerouslySetInnerHTML={{ __html: article.body }}
-        style={{ fontFamily: 'var(--font-body)' }}
-      />
+      <div className="article-body text-black" style={{ fontFamily: 'var(--font-body)' }}>
+        {article.bodyBlocks && article.bodyBlocks.length > 0 ? (
+          <PortableText value={article.bodyBlocks as any} components={portableTextComponents} />
+        ) : (
+          <div dangerouslySetInnerHTML={{ __html: article.body }} />
+        )}
+      </div>
 
       {/* Related Articles */}
       {relatedArticles.length > 0 && (
@@ -139,6 +272,7 @@ export function ArticleDetail() {
           </div>
         </section>
       )}
-    </div>
+      </div>
+    </>
   );
 }

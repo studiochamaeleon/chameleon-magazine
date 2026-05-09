@@ -1,0 +1,22 @@
+{
+  "name": "chameleon-magazine-studio",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "build": "sanity build",
+    "deploy": "sanity deploy"
+  },
+  "dependencies": {
+    "@sanity/vision": "5.24.0",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "sanity": "5.24.0",
+    "styled-components": "6.4.1"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}
