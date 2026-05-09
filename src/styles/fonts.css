@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+@font-face {
+  font-family: 'KakaoBigSans';
+  src: url('https://cdn.jsdelivr.net/gh/kakao/kakao-font/font/KakaoBig-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KakaoBigSans';
+  src: url('https://cdn.jsdelivr.net/gh/kakao/kakao-font/font/KakaoBig-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KakaoBigSans';
+  src: url('https://cdn.jsdelivr.net/gh/kakao/kakao-font/font/KakaoBig-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KakaoSmallSans';
+  src: url('https://cdn.jsdelivr.net/gh/kakao/kakao-font/font/KakaoSmall-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KakaoSmallSans';
+  src: url('https://cdn.jsdelivr.net/gh/kakao/kakao-font/font/KakaoSmall-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-headline: 'KakaoBigSans', 'Noto Sans KR', system-ui, sans-serif;
+  --font-body: 'KakaoSmallSans', 'Noto Sans KR', system-ui, sans-serif;
+}
