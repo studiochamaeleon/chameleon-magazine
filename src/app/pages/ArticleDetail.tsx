@@ -236,13 +236,39 @@ export function ArticleDetail() {
 
       {/* Cover Image */}
       {article.coverImage && (
-        <div className="overflow-hidden mb-8" style={{ aspectRatio: '16/9' }}>
-          <img
-            src={article.coverImage}
-            alt={article.title}
-            className="w-full h-full object-cover"
-          />
-        </div>
+        <figure className="mb-8">
+          <div className="overflow-hidden" style={{ aspectRatio: '16/9' }}>
+            <img
+              src={article.coverImage}
+              alt={article.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          {(article.coverImageCaption || article.coverImageCredit) && (
+            <figcaption
+              className="mt-3 text-gray-500"
+              style={{ fontFamily: 'var(--font-body)' }}
+            >
+              {article.coverImageCaption && (
+                <p className="leading-relaxed" style={{ fontSize: '0.82rem' }}>
+                  {article.coverImageCaption}
+                </p>
+              )}
+              {article.coverImageCredit && (
+                <p
+                  className="mt-1 uppercase"
+                  style={{
+                    fontSize: '0.72rem',
+                    letterSpacing: '0.16em',
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {article.coverImageCredit}
+                </p>
+              )}
+            </figcaption>
+          )}
+        </figure>
       )}
 
       {/* Body */}

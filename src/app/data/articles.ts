@@ -12,6 +12,8 @@ export interface Article {
   date: string;
   author: string;
   coverImage: string;
+  coverImageCaption?: string;
+  coverImageCredit?: string;
   body: string;
   bodyBlocks?: unknown[];
   relatedArticles?: string[];

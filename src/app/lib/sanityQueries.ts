@@ -14,6 +14,8 @@ interface SanityArticle {
   publishedAt?: string;
   author?: string;
   coverImage?: unknown;
+  coverImageCaption?: string;
+  coverImageCredit?: string;
   body?: unknown[];
   relatedArticles?: { _id: string }[];
 }
@@ -30,6 +32,8 @@ const articleProjection = `{
   publishedAt,
   author,
   coverImage,
+  coverImageCaption,
+  coverImageCredit,
   body,
   relatedArticles[]->{ _id }
 }`;
@@ -54,6 +58,8 @@ function toArticle(doc: SanityArticle): Article {
     date: doc.publishedAt ?? new Date().toISOString(),
     author: doc.author ?? 'CHAMELEON Editorial',
     coverImage: doc.coverImage ? urlFor(doc.coverImage).width(1600).height(900).fit('crop').auto('format').url() : '',
+    coverImageCaption: doc.coverImageCaption ?? '',
+    coverImageCredit: doc.coverImageCredit ?? '',
     body: '',
     bodyBlocks: doc.body ?? [],
     relatedArticles: doc.relatedArticles?.map((article) => article._id) ?? [],

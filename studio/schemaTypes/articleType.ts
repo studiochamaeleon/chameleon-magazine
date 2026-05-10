@@ -93,6 +93,19 @@ export const articleType = defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: 'coverImageCaption',
+      title: 'Cover Image Caption',
+      description: '커버 이미지 아래에 작게 표시할 설명 문구입니다.',
+      type: 'text',
+      rows: 2,
+    }),
+    defineField({
+      name: 'coverImageCredit',
+      title: 'Cover Image Credit',
+      description: '사진가, 매체, 에이전시 등 이미지 출처를 입력하세요.',
+      type: 'string',
+    }),
+    defineField({
       name: 'body',
       title: 'Body',
       type: 'array',
