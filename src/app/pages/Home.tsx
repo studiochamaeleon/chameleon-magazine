@@ -76,7 +76,7 @@ function SectionHeader({
 }
 
 export function Home() {
-  const { articles } = useArticles();
+  const { articles, loading, error } = useArticles();
 
   const [editorsVisible, setEditorsVisible] = useState(INITIAL_COUNT);
   const [newsVisible, setNewsVisible] = useState(INITIAL_COUNT);
@@ -103,6 +103,37 @@ export function Home() {
   const listenCfg = CATEGORY_CONFIGS['listen'];
   const visualCfg = CATEGORY_CONFIGS['visual'];
   const cultureCfg = CATEGORY_CONFIGS['culture'];
+
+  if (loading) {
+    return (
+      <div className="min-h-[50vh] flex items-center justify-center px-6 text-center">
+        <p
+          className="text-black"
+          style={{ fontFamily: 'var(--font-headline)', fontSize: '1rem', fontWeight: 800, letterSpacing: '0.08em' }}
+        >
+          LOADING CHAMELEON MAGAZINE
+        </p>
+      </div>
+    );
+  }
+
+  if (error || articles.length === 0) {
+    return (
+      <div className="min-h-[50vh] flex items-center justify-center px-6 text-center">
+        <div>
+          <p
+            className="text-black"
+            style={{ fontFamily: 'var(--font-headline)', fontSize: '1rem', fontWeight: 900, letterSpacing: '0.08em' }}
+          >
+            SANITY ARTICLES NOT LOADED
+          </p>
+          <p className="mt-3 text-sm text-gray-500" style={{ fontFamily: 'var(--font-body)' }}>
+            {error ?? 'Sanity에 발행된 기사가 없거나 공개 데이터셋에서 조회되지 않습니다.'}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ fontFamily: 'var(--font-body)' }}>

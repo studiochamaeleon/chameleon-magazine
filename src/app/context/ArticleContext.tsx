@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Article, MOCK_ARTICLES } from '../data/articles';
+import { Article } from '../data/articles';
 import { fetchPublishedArticles } from '../lib/sanityQueries';
 
 interface ArticleContextValue {
@@ -15,9 +15,7 @@ interface ArticleContextValue {
 const ArticleContext = createContext<ArticleContextValue | null>(null);
 
 export function ArticleProvider({ children }: { children: React.ReactNode }) {
-  const [allArticles, setAllArticles] = useState<Article[]>(() =>
-    MOCK_ARTICLES.map((a) => ({ ...a, status: 'published' as const }))
-  );
+  const [allArticles, setAllArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,11 +27,12 @@ export function ArticleProvider({ children }: { children: React.ReactNode }) {
         setLoading(true);
         setError(null);
         const sanityArticles = await fetchPublishedArticles();
-        if (!ignore && sanityArticles.length > 0) {
+        if (!ignore) {
           setAllArticles(sanityArticles);
         }
       } catch (err) {
         if (!ignore) {
+          setAllArticles([]);
           setError(err instanceof Error ? err.message : 'Sanity에서 기사를 불러오지 못했습니다.');
         }
       } finally {
