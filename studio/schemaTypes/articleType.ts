@@ -74,6 +74,13 @@ export const articleType = defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'isHomepageHero',
+      title: 'Homepage Main Story',
+      description: '홈 랜딩에서 가장 크게 보여줄 기사입니다. 여러 개가 켜져 있으면 최신 발행일의 기사가 우선 표시됩니다.',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
       name: 'publishedAt',
       title: 'Published At',
       type: 'datetime',

@@ -84,7 +84,7 @@ export function Home() {
   const [visualVisible, setVisualVisible] = useState(INITIAL_COUNT);
   const [cultureVisible, setCultureVisible] = useState(INITIAL_COUNT);
 
-  const featured = articles.find((a) => a.isEditorsPick) ?? articles[0];
+  const featured = articles.find((a) => a.isHomepageHero) ?? articles.find((a) => a.isEditorsPick) ?? articles[0];
   const heroSideArticles = articles.filter((a) => a.id !== featured?.id).slice(0, 5);
 
   const allEditorsPicks = articles.filter((a) => a.isEditorsPick);

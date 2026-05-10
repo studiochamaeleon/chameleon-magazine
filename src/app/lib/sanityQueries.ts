@@ -11,6 +11,7 @@ interface SanityArticle {
   subcategory?: Subcategory | null;
   tags?: string[];
   isEditorsPick?: boolean;
+  isHomepageHero?: boolean;
   publishedAt?: string;
   author?: string;
   coverType?: 'image' | 'youtube' | 'instagram' | 'embed';
@@ -36,6 +37,7 @@ const articleProjection = `{
   subcategory,
   tags,
   isEditorsPick,
+  isHomepageHero,
   publishedAt,
   author,
   coverType,
@@ -98,6 +100,7 @@ function toArticle(doc: SanityArticle): Article {
     subcategory: doc.subcategory ?? null,
     tags: doc.tags ?? [],
     isEditorsPick: doc.isEditorsPick ?? false,
+    isHomepageHero: doc.isHomepageHero ?? false,
     date: doc.publishedAt ?? new Date().toISOString(),
     author: doc.author ?? 'CHAMELEON Editorial',
     coverType,

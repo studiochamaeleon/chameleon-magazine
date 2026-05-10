@@ -9,6 +9,7 @@ export interface Article {
   subcategory: Subcategory | null;
   tags: string[];
   isEditorsPick: boolean;
+  isHomepageHero?: boolean;
   date: string;
   author: string;
   coverType?: 'image' | 'youtube' | 'instagram' | 'embed';
