@@ -18,7 +18,11 @@ function getYouTubeEmbedUrl(url: string) {
     const parsed = new URL(url);
     const videoId = parsed.hostname.includes('youtu.be')
       ? parsed.pathname.slice(1)
-      : parsed.searchParams.get('v');
+      : parsed.pathname.includes('/shorts/')
+        ? parsed.pathname.split('/shorts/')[1]?.split('/')[0]
+        : parsed.pathname.includes('/embed/')
+          ? parsed.pathname.split('/embed/')[1]?.split('/')[0]
+          : parsed.searchParams.get('v');
     return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
   } catch {
     return null;
@@ -146,6 +150,7 @@ export function ArticleDetail() {
 
   const catConfig = CATEGORY_CONFIGS[article.category as Category];
   const accentColor = catConfig?.color ?? '#000000';
+  const coverYouTubeEmbedUrl = article.coverYouTubeUrl ? getYouTubeEmbedUrl(article.coverYouTubeUrl) : null;
 
   const relatedArticles = (article.relatedArticles ?? [])
     .map((rid) => getArticleById(rid))
@@ -234,8 +239,30 @@ export function ArticleDetail() {
         )}
       </div>
 
-      {/* Cover Image */}
-      {article.coverImage && (
+      {/* Cover Media */}
+      {article.coverType === 'youtube' && coverYouTubeEmbedUrl ? (
+        <figure className="mb-8">
+          <div className="w-full overflow-hidden bg-black" style={{ aspectRatio: '16/9' }}>
+            <iframe
+              src={coverYouTubeEmbedUrl}
+              title={article.coverYouTubeCaption || article.title}
+              className="w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </div>
+          {article.coverYouTubeCaption && (
+            <figcaption
+              className="mt-3 text-gray-500"
+              style={{ fontFamily: 'var(--font-body)' }}
+            >
+              <p className="leading-relaxed" style={{ fontSize: '0.82rem' }}>
+                {article.coverYouTubeCaption}
+              </p>
+            </figcaption>
+          )}
+        </figure>
+      ) : article.coverImage ? (
         <figure className="mb-8">
           <div className="overflow-hidden" style={{ aspectRatio: '16/9' }}>
             <img
@@ -269,7 +296,7 @@ export function ArticleDetail() {
             </figcaption>
           )}
         </figure>
-      )}
+      ) : null}
 
       {/* Body */}
       <div className="article-body text-black" style={{ fontFamily: 'var(--font-body)' }}>

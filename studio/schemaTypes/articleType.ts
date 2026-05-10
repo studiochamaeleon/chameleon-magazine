@@ -87,10 +87,25 @@ export const articleType = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'coverType',
+      title: 'Cover Type',
+      type: 'string',
+      initialValue: 'image',
+      options: {
+        list: [
+          { title: 'Image', value: 'image' },
+          { title: 'YouTube Embed', value: 'youtube' },
+        ],
+        layout: 'radio',
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: 'coverImage',
       title: 'Cover Image',
       type: 'image',
       options: { hotspot: true },
+      hidden: ({ parent }) => parent?.coverType === 'youtube',
     }),
     defineField({
       name: 'coverImageCaption',
@@ -98,12 +113,36 @@ export const articleType = defineType({
       description: '커버 이미지 아래에 작게 표시할 설명 문구입니다.',
       type: 'text',
       rows: 2,
+      hidden: ({ parent }) => parent?.coverType === 'youtube',
     }),
     defineField({
       name: 'coverImageCredit',
       title: 'Cover Image Credit',
       description: '사진가, 매체, 에이전시 등 이미지 출처를 입력하세요.',
       type: 'string',
+      hidden: ({ parent }) => parent?.coverType === 'youtube',
+    }),
+    defineField({
+      name: 'coverYouTubeUrl',
+      title: 'Cover YouTube URL',
+      description: '커버 영역에 삽입할 YouTube 링크입니다.',
+      type: 'url',
+      hidden: ({ parent }) => parent?.coverType !== 'youtube',
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          if ((context.parent as { coverType?: string })?.coverType === 'youtube' && !value) {
+            return 'YouTube 커버를 선택한 경우 URL이 필요합니다.';
+          }
+          return true;
+        }),
+    }),
+    defineField({
+      name: 'coverYouTubeCaption',
+      title: 'Cover YouTube Caption',
+      description: 'YouTube 커버 아래에 작게 표시할 설명 문구입니다.',
+      type: 'text',
+      rows: 2,
+      hidden: ({ parent }) => parent?.coverType !== 'youtube',
     }),
     defineField({
       name: 'body',

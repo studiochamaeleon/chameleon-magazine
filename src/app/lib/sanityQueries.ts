@@ -13,9 +13,12 @@ interface SanityArticle {
   isEditorsPick?: boolean;
   publishedAt?: string;
   author?: string;
+  coverType?: 'image' | 'youtube';
   coverImage?: unknown;
   coverImageCaption?: string;
   coverImageCredit?: string;
+  coverYouTubeUrl?: string;
+  coverYouTubeCaption?: string;
   body?: unknown[];
   relatedArticles?: { _id: string }[];
 }
@@ -31,9 +34,12 @@ const articleProjection = `{
   isEditorsPick,
   publishedAt,
   author,
+  coverType,
   coverImage,
   coverImageCaption,
   coverImageCredit,
+  coverYouTubeUrl,
+  coverYouTubeCaption,
   body,
   relatedArticles[]->{ _id }
 }`;
@@ -45,7 +51,36 @@ const publishedArticlesQuery = `*[
   !(_id in path("drafts.**"))
 ] | order(publishedAt desc) ${articleProjection}`;
 
+function getYouTubeId(url?: string) {
+  if (!url) return null;
+
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname.includes('youtu.be')) {
+      return parsed.pathname.slice(1) || null;
+    }
+    if (parsed.pathname.includes('/shorts/')) {
+      return parsed.pathname.split('/shorts/')[1]?.split('/')[0] ?? null;
+    }
+    if (parsed.pathname.includes('/embed/')) {
+      return parsed.pathname.split('/embed/')[1]?.split('/')[0] ?? null;
+    }
+    return parsed.searchParams.get('v');
+  } catch {
+    return null;
+  }
+}
+
+function getYouTubeThumbnail(url?: string) {
+  const videoId = getYouTubeId(url);
+  return videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '';
+}
+
 function toArticle(doc: SanityArticle): Article {
+  const coverType = doc.coverType ?? 'image';
+  const imageCover = doc.coverImage ? urlFor(doc.coverImage).width(1600).height(900).fit('crop').auto('format').url() : '';
+  const youtubeCover = getYouTubeThumbnail(doc.coverYouTubeUrl);
+
   return {
     id: doc._id,
     title: doc.title ?? 'Untitled',
@@ -57,9 +92,12 @@ function toArticle(doc: SanityArticle): Article {
     isEditorsPick: doc.isEditorsPick ?? false,
     date: doc.publishedAt ?? new Date().toISOString(),
     author: doc.author ?? 'CHAMELEON Editorial',
-    coverImage: doc.coverImage ? urlFor(doc.coverImage).width(1600).height(900).fit('crop').auto('format').url() : '',
+    coverType,
+    coverImage: coverType === 'youtube' ? youtubeCover : imageCover,
     coverImageCaption: doc.coverImageCaption ?? '',
     coverImageCredit: doc.coverImageCredit ?? '',
+    coverYouTubeUrl: doc.coverYouTubeUrl ?? '',
+    coverYouTubeCaption: doc.coverYouTubeCaption ?? '',
     body: '',
     bodyBlocks: doc.body ?? [],
     relatedArticles: doc.relatedArticles?.map((article) => article._id) ?? [],
