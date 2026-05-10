@@ -170,8 +170,8 @@ function ExternalEmbed({
 
 const portableTextComponents = {
   types: {
-    image: ({ value }: { value: { alt?: string; caption?: string } }) => {
-      const src = getImageUrl(value);
+    image: ({ value }: { value: { alt?: string; caption?: string; externalImageUrl?: string } }) => {
+      const src = value.externalImageUrl || getImageUrl(value);
       if (!src) return null;
 
       return (

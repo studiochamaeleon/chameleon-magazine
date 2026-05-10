@@ -219,6 +219,12 @@ export const articleType = defineType({
           options: { hotspot: true },
           fields: [
             defineField({
+              name: 'externalImageUrl',
+              title: 'Image URL',
+              description: '파일 업로드 대신 외부 이미지 주소를 사용할 때 입력하세요.',
+              type: 'url',
+            }),
+            defineField({
               name: 'alt',
               title: 'Alt text',
               type: 'string',

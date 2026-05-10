@@ -113,20 +113,25 @@ function ExternalEmbed({
 
 const portableTextComponents = {
   types: {
-    image: ({ value }: { value: { alt?: string; caption?: string } }) => (
-      <figure className="my-8">
-        <img
-          src={urlFor(value).width(1400).auto('format').url()}
-          alt={value.alt ?? ''}
-          className="w-full"
-        />
-        {value.caption && (
-          <figcaption className="mt-2 text-gray-500" style={{ fontSize: '0.78rem' }}>
-            {value.caption}
-          </figcaption>
-        )}
-      </figure>
-    ),
+    image: ({ value }: { value: { alt?: string; caption?: string; externalImageUrl?: string; asset?: unknown } }) => {
+      const src = value.externalImageUrl || (value.asset ? urlFor(value).width(1400).auto('format').url() : '');
+      if (!src) return null;
+
+      return (
+        <figure className="my-8">
+          <img
+            src={src}
+            alt={value.alt ?? ''}
+            className="w-full"
+          />
+          {value.caption && (
+            <figcaption className="mt-2 text-gray-500" style={{ fontSize: '0.78rem' }}>
+              {value.caption}
+            </figcaption>
+          )}
+        </figure>
+      );
+    },
     youtube: ({ value }: { value: { url?: string; caption?: string } }) => {
       const embedUrl = value.url ? getYouTubeEmbedUrl(value.url) : null;
       if (!embedUrl) return null;
