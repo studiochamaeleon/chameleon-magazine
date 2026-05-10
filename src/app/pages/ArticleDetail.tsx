@@ -29,6 +29,88 @@ function getYouTubeEmbedUrl(url: string) {
   }
 }
 
+function getInstagramEmbedUrl(url: string) {
+  try {
+    const parsed = new URL(url);
+    if (!parsed.hostname.includes('instagram.com')) return null;
+
+    const path = parsed.pathname.replace(/\/$/, '');
+    if (!path) return null;
+
+    return `https://www.instagram.com${path}/embed`;
+  } catch {
+    return null;
+  }
+}
+
+function getSpotifyEmbedUrl(url: string) {
+  try {
+    const parsed = new URL(url);
+    if (!parsed.hostname.includes('open.spotify.com')) return null;
+
+    const parts = parsed.pathname.split('/').filter(Boolean);
+    const normalizedParts = parts[0]?.startsWith('intl-') ? parts.slice(1) : parts;
+    const [type, id] = normalizedParts;
+
+    if (!type || !id) return null;
+
+    return `https://open.spotify.com/embed/${type}/${id}`;
+  } catch {
+    return null;
+  }
+}
+
+function getExternalEmbedUrl(url?: string, provider?: string) {
+  if (!url) return null;
+
+  if (provider === 'instagram') return getInstagramEmbedUrl(url);
+  if (provider === 'spotify') return getSpotifyEmbedUrl(url);
+
+  return getSpotifyEmbedUrl(url) ?? getInstagramEmbedUrl(url) ?? url;
+}
+
+function ExternalEmbed({
+  url,
+  provider,
+  title,
+  caption,
+  height,
+}: {
+  url?: string;
+  provider?: string;
+  title?: string;
+  caption?: string;
+  height?: number;
+}) {
+  const embedUrl = getExternalEmbedUrl(url, provider);
+  if (!embedUrl) return null;
+
+  const isInstagram = provider === 'instagram' || embedUrl.includes('instagram.com');
+  const isSpotify = provider === 'spotify' || embedUrl.includes('open.spotify.com');
+  const embedHeight = height ?? (isInstagram ? 680 : isSpotify ? 380 : 360);
+
+  return (
+    <figure className="my-8">
+      <div className="w-full overflow-hidden bg-black">
+        <iframe
+          src={embedUrl}
+          title={title || caption || 'Embedded content'}
+          className="w-full"
+          style={{ height: embedHeight, border: 0, display: 'block' }}
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture; web-share"
+          allowFullScreen
+          loading="lazy"
+        />
+      </div>
+      {caption && (
+        <figcaption className="mt-2 text-gray-500" style={{ fontSize: '0.78rem' }}>
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
 const portableTextComponents = {
   types: {
     image: ({ value }: { value: { alt?: string; caption?: string } }) => (
@@ -68,6 +150,15 @@ const portableTextComponents = {
         </figure>
       );
     },
+    embed: ({ value }: { value: { provider?: string; url?: string; title?: string; caption?: string; height?: number } }) => (
+      <ExternalEmbed
+        provider={value.provider}
+        url={value.url}
+        title={value.title}
+        caption={value.caption}
+        height={value.height}
+      />
+    ),
   },
   block: {
     h2: ({ children }: { children?: React.ReactNode }) => (
@@ -151,6 +242,7 @@ export function ArticleDetail() {
   const catConfig = CATEGORY_CONFIGS[article.category as Category];
   const accentColor = catConfig?.color ?? '#000000';
   const coverYouTubeEmbedUrl = article.coverYouTubeUrl ? getYouTubeEmbedUrl(article.coverYouTubeUrl) : null;
+  const coverEmbedProvider = article.coverType === 'instagram' ? 'instagram' : 'iframe';
 
   const relatedArticles = (article.relatedArticles ?? [])
     .map((rid) => getArticleById(rid))
@@ -262,6 +354,16 @@ export function ArticleDetail() {
             </figcaption>
           )}
         </figure>
+      ) : ['instagram', 'embed'].includes(article.coverType ?? '') && article.coverEmbedUrl ? (
+        <div className="mb-8">
+          <ExternalEmbed
+            provider={coverEmbedProvider}
+            url={article.coverEmbedUrl}
+            title={article.coverEmbedTitle || article.title}
+            caption={article.coverEmbedCaption}
+            height={article.coverEmbedHeight}
+          />
+        </div>
       ) : article.coverImage ? (
         <figure className="mb-8">
           <div className="overflow-hidden" style={{ aspectRatio: '16/9' }}>

@@ -11,12 +11,16 @@ export interface Article {
   isEditorsPick: boolean;
   date: string;
   author: string;
-  coverType?: 'image' | 'youtube';
+  coverType?: 'image' | 'youtube' | 'instagram' | 'embed';
   coverImage: string;
   coverImageCaption?: string;
   coverImageCredit?: string;
   coverYouTubeUrl?: string;
   coverYouTubeCaption?: string;
+  coverEmbedUrl?: string;
+  coverEmbedTitle?: string;
+  coverEmbedCaption?: string;
+  coverEmbedHeight?: number;
   body: string;
   bodyBlocks?: unknown[];
   relatedArticles?: string[];

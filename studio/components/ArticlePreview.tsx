@@ -25,12 +25,16 @@ type ArticleDocument = SanityDocument & {
   isEditorsPick?: boolean;
   publishedAt?: string;
   author?: string;
-  coverType?: 'image' | 'youtube';
+  coverType?: 'image' | 'youtube' | 'instagram' | 'embed';
   coverImage?: unknown;
   coverImageCaption?: string;
   coverImageCredit?: string;
   coverYouTubeUrl?: string;
   coverYouTubeCaption?: string;
+  coverEmbedUrl?: string;
+  coverEmbedTitle?: string;
+  coverEmbedCaption?: string;
+  coverEmbedHeight?: number;
   body?: unknown[];
 };
 
@@ -79,6 +83,91 @@ function getYouTubeEmbedUrl(url?: string) {
   }
 }
 
+function getInstagramEmbedUrl(url?: string) {
+  if (!url) return null;
+
+  try {
+    const parsed = new URL(url);
+    if (!parsed.hostname.includes('instagram.com')) return null;
+
+    const path = parsed.pathname.replace(/\/$/, '');
+    if (!path) return null;
+
+    return `https://www.instagram.com${path}/embed`;
+  } catch {
+    return null;
+  }
+}
+
+function getSpotifyEmbedUrl(url?: string) {
+  if (!url) return null;
+
+  try {
+    const parsed = new URL(url);
+    if (!parsed.hostname.includes('open.spotify.com')) return null;
+
+    const parts = parsed.pathname.split('/').filter(Boolean);
+    const normalizedParts = parts[0]?.startsWith('intl-') ? parts.slice(1) : parts;
+    const [type, id] = normalizedParts;
+
+    if (!type || !id) return null;
+
+    return `https://open.spotify.com/embed/${type}/${id}`;
+  } catch {
+    return null;
+  }
+}
+
+function getExternalEmbedUrl(url?: string, provider?: string) {
+  if (!url) return null;
+
+  if (provider === 'instagram') return getInstagramEmbedUrl(url);
+  if (provider === 'spotify') return getSpotifyEmbedUrl(url);
+
+  return getSpotifyEmbedUrl(url) ?? getInstagramEmbedUrl(url) ?? url;
+}
+
+function ExternalEmbed({
+  url,
+  provider,
+  title,
+  caption,
+  height,
+}: {
+  url?: string;
+  provider?: string;
+  title?: string;
+  caption?: string;
+  height?: number;
+}) {
+  const embedUrl = getExternalEmbedUrl(url, provider);
+  if (!embedUrl) return null;
+
+  const isInstagram = provider === 'instagram' || embedUrl.includes('instagram.com');
+  const isSpotify = provider === 'spotify' || embedUrl.includes('open.spotify.com');
+  const embedHeight = height ?? (isInstagram ? 680 : isSpotify ? 380 : 360);
+
+  return (
+    <figure style={{ margin: '32px 0' }}>
+      <div style={{ width: '100%', overflow: 'hidden', background: '#000' }}>
+        <iframe
+          src={embedUrl}
+          title={title || caption || 'Embedded content'}
+          style={{ width: '100%', height: embedHeight, border: 0, display: 'block' }}
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture; web-share"
+          allowFullScreen
+          loading="lazy"
+        />
+      </div>
+      {caption && (
+        <figcaption style={{ marginTop: 8, color: '#6b7280', fontSize: '0.78rem', lineHeight: 1.55 }}>
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
 const portableTextComponents = {
   types: {
     image: ({ value }: { value: { alt?: string; caption?: string } }) => {
@@ -119,6 +208,15 @@ const portableTextComponents = {
         </figure>
       );
     },
+    embed: ({ value }: { value: { provider?: string; url?: string; title?: string; caption?: string; height?: number } }) => (
+      <ExternalEmbed
+        provider={value.provider}
+        url={value.url}
+        title={value.title}
+        caption={value.caption}
+        height={value.height}
+      />
+    ),
   },
   block: {
     h2: ({ children }: { children?: ReactNode }) => (
@@ -157,6 +255,7 @@ export function ArticlePreview({ document }: PreviewProps) {
   const category = categories[article.category ?? 'news'] ?? categories.news;
   const coverImageUrl = getImageUrl(article.coverImage);
   const coverYouTubeEmbedUrl = getYouTubeEmbedUrl(article.coverYouTubeUrl);
+  const coverEmbedProvider = article.coverType === 'instagram' ? 'instagram' : 'iframe';
   const frameWidth = viewport === 'mobile' ? 390 : 900;
 
   const body = useMemo(() => article.body ?? [], [article.body]);
@@ -262,6 +361,14 @@ export function ArticlePreview({ document }: PreviewProps) {
                 </figcaption>
               )}
             </figure>
+          ) : ['instagram', 'embed'].includes(article.coverType ?? '') && article.coverEmbedUrl ? (
+            <ExternalEmbed
+              provider={coverEmbedProvider}
+              url={article.coverEmbedUrl}
+              title={article.coverEmbedTitle || article.title || 'Cover embed'}
+              caption={article.coverEmbedCaption}
+              height={article.coverEmbedHeight}
+            />
           ) : coverImageUrl ? (
             <figure style={{ margin: '0 0 32px' }}>
               <div style={{ aspectRatio: '16 / 9', overflow: 'hidden' }}>

@@ -95,6 +95,8 @@ export const articleType = defineType({
         list: [
           { title: 'Image', value: 'image' },
           { title: 'YouTube Embed', value: 'youtube' },
+          { title: 'Instagram Embed', value: 'instagram' },
+          { title: 'Generic iframe / Spotify Embed', value: 'embed' },
         ],
         layout: 'radio',
       },
@@ -105,7 +107,7 @@ export const articleType = defineType({
       title: 'Cover Image',
       type: 'image',
       options: { hotspot: true },
-      hidden: ({ parent }) => parent?.coverType === 'youtube',
+      hidden: ({ parent }) => (parent?.coverType ?? 'image') !== 'image',
     }),
     defineField({
       name: 'coverImageCaption',
@@ -113,14 +115,14 @@ export const articleType = defineType({
       description: '커버 이미지 아래에 작게 표시할 설명 문구입니다.',
       type: 'text',
       rows: 2,
-      hidden: ({ parent }) => parent?.coverType === 'youtube',
+      hidden: ({ parent }) => (parent?.coverType ?? 'image') !== 'image',
     }),
     defineField({
       name: 'coverImageCredit',
       title: 'Cover Image Credit',
       description: '사진가, 매체, 에이전시 등 이미지 출처를 입력하세요.',
       type: 'string',
-      hidden: ({ parent }) => parent?.coverType === 'youtube',
+      hidden: ({ parent }) => (parent?.coverType ?? 'image') !== 'image',
     }),
     defineField({
       name: 'coverYouTubeUrl',
@@ -143,6 +145,44 @@ export const articleType = defineType({
       type: 'text',
       rows: 2,
       hidden: ({ parent }) => parent?.coverType !== 'youtube',
+    }),
+    defineField({
+      name: 'coverEmbedUrl',
+      title: 'Cover Embed URL',
+      description: 'Instagram URL, Spotify URL 또는 직접 iframe src URL을 입력하세요.',
+      type: 'url',
+      hidden: ({ parent }) => !['instagram', 'embed'].includes(parent?.coverType ?? ''),
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const coverType = (context.parent as { coverType?: string })?.coverType;
+          if (['instagram', 'embed'].includes(coverType ?? '') && !value) {
+            return '임베드 커버를 선택한 경우 URL이 필요합니다.';
+          }
+          return true;
+        }),
+    }),
+    defineField({
+      name: 'coverEmbedTitle',
+      title: 'Cover Embed Title',
+      type: 'string',
+      hidden: ({ parent }) => !['instagram', 'embed'].includes(parent?.coverType ?? ''),
+    }),
+    defineField({
+      name: 'coverEmbedCaption',
+      title: 'Cover Embed Caption',
+      description: '임베드 커버 아래에 작게 표시할 설명 문구입니다.',
+      type: 'text',
+      rows: 2,
+      hidden: ({ parent }) => !['instagram', 'embed'].includes(parent?.coverType ?? ''),
+    }),
+    defineField({
+      name: 'coverEmbedHeight',
+      title: 'Cover Embed Height',
+      description: 'Spotify playlist/profile은 352-480, Instagram은 620-760 정도를 권장합니다.',
+      type: 'number',
+      initialValue: 680,
+      hidden: ({ parent }) => !['instagram', 'embed'].includes(parent?.coverType ?? ''),
+      validation: (Rule) => Rule.min(180).max(1200),
     }),
     defineField({
       name: 'body',
@@ -191,6 +231,7 @@ export const articleType = defineType({
           ],
         }),
         defineArrayMember({ type: 'youtube' }),
+        defineArrayMember({ type: 'embed' }),
       ],
     }),
     defineField({

@@ -13,12 +13,16 @@ interface SanityArticle {
   isEditorsPick?: boolean;
   publishedAt?: string;
   author?: string;
-  coverType?: 'image' | 'youtube';
+  coverType?: 'image' | 'youtube' | 'instagram' | 'embed';
   coverImage?: unknown;
   coverImageCaption?: string;
   coverImageCredit?: string;
   coverYouTubeUrl?: string;
   coverYouTubeCaption?: string;
+  coverEmbedUrl?: string;
+  coverEmbedTitle?: string;
+  coverEmbedCaption?: string;
+  coverEmbedHeight?: number;
   body?: unknown[];
   relatedArticles?: { _id: string }[];
 }
@@ -40,6 +44,10 @@ const articleProjection = `{
   coverImageCredit,
   coverYouTubeUrl,
   coverYouTubeCaption,
+  coverEmbedUrl,
+  coverEmbedTitle,
+  coverEmbedCaption,
+  coverEmbedHeight,
   body,
   relatedArticles[]->{ _id }
 }`;
@@ -98,6 +106,10 @@ function toArticle(doc: SanityArticle): Article {
     coverImageCredit: doc.coverImageCredit ?? '',
     coverYouTubeUrl: doc.coverYouTubeUrl ?? '',
     coverYouTubeCaption: doc.coverYouTubeCaption ?? '',
+    coverEmbedUrl: doc.coverEmbedUrl ?? '',
+    coverEmbedTitle: doc.coverEmbedTitle ?? '',
+    coverEmbedCaption: doc.coverEmbedCaption ?? '',
+    coverEmbedHeight: doc.coverEmbedHeight,
     body: '',
     bodyBlocks: doc.body ?? [],
     relatedArticles: doc.relatedArticles?.map((article) => article._id) ?? [],
