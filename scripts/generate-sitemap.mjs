@@ -24,7 +24,11 @@ function escapeXml(value) {
 }
 
 function toUrl(path) {
-  return `${SITE_URL}${path === '/' ? '/' : path}`;
+  if (path === '/') {
+    return `${SITE_URL}/`;
+  }
+
+  return `${SITE_URL}${path.replace(/\/+$/, '')}/`;
 }
 
 function toDate(value) {
