@@ -156,7 +156,7 @@ export function Home() {
           <div className="overflow-hidden flex-1 py-2">
             <div
               className="flex gap-0 whitespace-nowrap"
-              style={{ animation: 'ticker 40s linear infinite' }}
+              style={{ animation: 'ticker var(--latest-ticker-duration) linear infinite' }}
             >
               {[...articles.slice(0, 8), ...articles.slice(0, 8)].map((a, i) => (
                 <Link
@@ -175,6 +175,16 @@ export function Home() {
       </div>
 
       <style>{`
+        :root {
+          --latest-ticker-duration: 22s;
+        }
+
+        @media (min-width: 768px) {
+          :root {
+            --latest-ticker-duration: 40s;
+          }
+        }
+
         @keyframes ticker {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }

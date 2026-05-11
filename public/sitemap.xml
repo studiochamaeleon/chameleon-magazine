@@ -43,6 +43,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://magazine.chameleonstudio.xyz/article/b8c6f14d-426b-4d5e-a72e-d24f78bed862/</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://magazine.chameleonstudio.xyz/article/ea62bd7c-68c9-4f74-9a0a-485e29f40068/</loc>
     <lastmod>2026-05-11</lastmod>
     <changefreq>weekly</changefreq>
@@ -61,6 +67,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://magazine.chameleonstudio.xyz/article/3b0c1a23-540f-4050-841d-a2f65198b799/</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://magazine.chameleonstudio.xyz/article/chameleon-seed-product-02/</loc>
     <lastmod>2026-05-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -75,6 +87,12 @@
   <url>
     <loc>https://magazine.chameleonstudio.xyz/article/280d2e9a-7457-4af3-a81a-43f3ab721604/</loc>
     <lastmod>2026-05-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://magazine.chameleonstudio.xyz/article/c433b81e-c0e6-4c81-9ec9-65d9a5bd077b/</loc>
+    <lastmod>2026-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
