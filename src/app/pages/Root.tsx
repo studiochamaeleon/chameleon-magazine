@@ -20,10 +20,10 @@ export function Root() {
                   style={{ height: '16px', width: 'auto' }}
                 />
               </div>
-              <p className="text-gray-500" style={{ fontSize: '0.8rem' }}>
+              <p className="text-gray-500" style={{ fontSize: '0.8rem', lineHeight: 1.7 }}>
                 디깅은 우리가. 트렌드는 당신이.<br />
-                음악 중심 문화 콘텐츠 매거진<br />
-                까멜리온 매거진
+                까멜리온 매거진은 음악 뉴스, 신곡 소식, 뮤직비디오, 라이브 영상,
+                아티스트 문화와 음악 트렌드를 다루는 음악 중심 문화 콘텐츠 매거진입니다.
               </p>
             </div>
             <div>
