@@ -390,13 +390,11 @@ export function ArticleDetail() {
         </div>
       ) : article.coverImage ? (
         <figure className="mb-8">
-          <div className="overflow-hidden" style={{ aspectRatio: '16/9' }}>
-            <img
-              src={article.coverImage}
-              alt={article.title}
-              className="w-full h-full object-cover"
-            />
-          </div>
+          <img
+            src={article.coverImage}
+            alt={article.title}
+            className="w-full h-auto"
+          />
           {(article.coverImageCaption || article.coverImageCredit) && (
             <figcaption
               className="mt-3 text-gray-500"

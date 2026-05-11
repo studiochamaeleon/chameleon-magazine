@@ -36,12 +36,13 @@ export function ArticleCard({ article, variant = 'standard' }: ArticleCardProps)
             </p>
           </div>
           {article.coverImage && (
-            <img
-              src={article.coverImage}
-              alt={article.title}
-              className="w-16 h-16 object-cover flex-shrink-0"
-              style={{ borderRadius: 2 }}
-            />
+            <div className="w-16 h-16 bg-gray-50 flex-shrink-0 overflow-hidden" style={{ borderRadius: 2 }}>
+              <img
+                src={article.coverImage}
+                alt={article.title}
+                className="w-full h-full object-contain"
+              />
+            </div>
           )}
         </article>
       </Link>
@@ -53,11 +54,11 @@ export function ArticleCard({ article, variant = 'standard' }: ArticleCardProps)
       <Link to={`/article/${article.id}`} className="block group">
         <article className="overflow-hidden">
           {article.coverImage && (
-            <div className="overflow-hidden" style={{ aspectRatio: '16/9' }}>
+            <div className="overflow-hidden bg-gray-50" style={{ aspectRatio: '16/9' }}>
               <img
                 src={article.coverImage}
                 alt={article.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
               />
             </div>
           )}
@@ -92,11 +93,11 @@ export function ArticleCard({ article, variant = 'standard' }: ArticleCardProps)
       <Link to={`/article/${article.id}`} className="block group h-full">
         <article className="h-full flex flex-col">
           {article.coverImage && (
-            <div className="overflow-hidden flex-shrink-0" style={{ aspectRatio: '4/3' }}>
+            <div className="overflow-hidden flex-shrink-0 bg-gray-50" style={{ aspectRatio: '4/3' }}>
               <img
                 src={article.coverImage}
                 alt={article.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
               />
             </div>
           )}
@@ -132,11 +133,11 @@ export function ArticleCard({ article, variant = 'standard' }: ArticleCardProps)
     <Link to={`/article/${article.id}`} className="block group">
       <article className="overflow-hidden">
         {article.coverImage && (
-          <div className="overflow-hidden" style={{ aspectRatio: '16/9' }}>
+          <div className="overflow-hidden bg-gray-50" style={{ aspectRatio: '16/9' }}>
             <img
               src={article.coverImage}
               alt={article.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
             />
           </div>
         )}

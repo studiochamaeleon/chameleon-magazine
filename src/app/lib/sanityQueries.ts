@@ -88,7 +88,7 @@ function getYouTubeThumbnail(url?: string) {
 
 function toArticle(doc: SanityArticle): Article {
   const coverType = doc.coverType ?? 'image';
-  const imageCover = doc.coverImage ? urlFor(doc.coverImage).width(1600).height(900).fit('crop').auto('format').url() : '';
+  const imageCover = doc.coverImage ? urlFor(doc.coverImage).width(1600).auto('format').url() : '';
   const youtubeCover = getYouTubeThumbnail(doc.coverYouTubeUrl);
 
   return {

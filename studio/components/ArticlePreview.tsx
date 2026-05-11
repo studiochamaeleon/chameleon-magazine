@@ -58,7 +58,7 @@ function getImageUrl(source?: unknown) {
   if (!source) return '';
 
   try {
-    return imageBuilder.image(source).width(1400).height(788).fit('crop').auto('format').url();
+    return imageBuilder.image(source).width(1400).auto('format').url();
   } catch {
     return '';
   }
@@ -371,9 +371,7 @@ export function ArticlePreview({ document }: PreviewProps) {
             />
           ) : coverImageUrl ? (
             <figure style={{ margin: '0 0 32px' }}>
-              <div style={{ aspectRatio: '16 / 9', overflow: 'hidden' }}>
-                <img src={coverImageUrl} alt={article.title ?? ''} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
+              <img src={coverImageUrl} alt={article.title ?? ''} style={{ display: 'block', width: '100%', height: 'auto' }} />
               {(article.coverImageCaption || article.coverImageCredit) && (
                 <figcaption style={{ marginTop: 12, color: '#6b7280' }}>
                   {article.coverImageCaption && <p style={{ margin: 0, fontSize: '0.82rem', lineHeight: 1.6 }}>{article.coverImageCaption}</p>}

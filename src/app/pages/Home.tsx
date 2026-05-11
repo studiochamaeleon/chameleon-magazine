@@ -192,11 +192,11 @@ export function Home() {
               className="md:col-span-2 block group md:pr-7 md:border-r border-black pb-7"
             >
               {featured.coverImage && (
-                <div className="overflow-hidden w-full" style={{ aspectRatio: '3/2' }}>
+                <div className="overflow-hidden w-full bg-gray-50" style={{ aspectRatio: '3/2' }}>
                   <img
                     src={featured.coverImage}
                     alt={featured.title}
-                    className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
+                    className="w-full h-full object-contain group-hover:scale-[1.02] transition-transform duration-700"
                   />
                 </div>
               )}
@@ -271,12 +271,13 @@ export function Home() {
                     </p>
                   </div>
                   {article.coverImage && (
-                    <img
-                      src={article.coverImage}
-                      alt={article.title}
-                      className="w-[72px] h-[72px] object-cover flex-shrink-0"
-                      style={{ borderRadius: 1 }}
-                    />
+                    <div className="w-[72px] h-[72px] bg-gray-50 overflow-hidden flex-shrink-0" style={{ borderRadius: 1 }}>
+                      <img
+                        src={article.coverImage}
+                        alt={article.title}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
                   )}
                 </Link>
               ))}

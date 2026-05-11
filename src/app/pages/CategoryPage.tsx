@@ -93,11 +93,11 @@ function HeroSection({ articles }: { articles: ReturnType<typeof useArticles>['a
         className="md:col-span-2 block group md:pr-8 md:border-r border-black pb-8 md:pb-0"
       >
         {hero.coverImage && (
-          <div className="overflow-hidden w-full" style={{ aspectRatio: '16/9' }}>
+          <div className="overflow-hidden w-full bg-gray-50" style={{ aspectRatio: '16/9' }}>
             <img
               src={hero.coverImage}
               alt={hero.title}
-              className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
+              className="w-full h-full object-contain group-hover:scale-[1.02] transition-transform duration-700"
             />
           </div>
         )}
@@ -157,12 +157,13 @@ function HeroSection({ articles }: { articles: ReturnType<typeof useArticles>['a
                 </p>
               </div>
               {article.coverImage && (
-                <img
-                  src={article.coverImage}
-                  alt={article.title}
-                  className="w-[68px] h-[68px] object-cover flex-shrink-0"
-                  style={{ borderRadius: 1 }}
-                />
+                <div className="w-[68px] h-[68px] bg-gray-50 overflow-hidden flex-shrink-0" style={{ borderRadius: 1 }}>
+                  <img
+                    src={article.coverImage}
+                    alt={article.title}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
               )}
             </Link>
           ))}
