@@ -5,6 +5,7 @@ import { CategoryPage } from './pages/CategoryPage';
 import { ArticleDetail } from './pages/ArticleDetail';
 import { SearchPage } from './pages/SearchPage';
 import { AdminEntry } from './pages/AdminEntry';
+import { About } from './pages/About';
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ export const router = createBrowserRouter([
       { index: true, Component: Home },
       { path: 'category/:category', Component: CategoryPage },
       { path: 'article/:id', Component: ArticleDetail },
+      { path: 'about', Component: About },
       { path: 'search', Component: SearchPage },
       { path: 'admin', Component: AdminEntry },
       {

@@ -109,6 +109,37 @@ export function HamburgerMenu({ isOpen, onClose }: HamburgerMenuProps) {
               <div className="border-b border-white/5 mx-6 my-1" />
             </div>
           ))}
+
+          <div className="mt-4 border-t border-white/10 pt-4">
+            <Link
+              to="/about"
+              onClick={onClose}
+              className="flex items-center justify-between px-6 py-3 hover:bg-white/5 group transition-colors"
+            >
+              <span
+                className="text-white"
+                style={{ fontFamily: 'var(--font-headline)', fontSize: '1rem', fontWeight: 700 }}
+              >
+                About
+              </span>
+              <ChevronRight size={14} className="text-white/30 group-hover:text-white transition-colors" />
+            </Link>
+            <a
+              href="https://www.instagram.com/chameleon_magazine/"
+              target="_blank"
+              rel="noreferrer"
+              onClick={onClose}
+              className="flex items-center justify-between px-6 py-3 hover:bg-white/5 group transition-colors"
+            >
+              <span
+                className="text-white"
+                style={{ fontFamily: 'var(--font-headline)', fontSize: '1rem', fontWeight: 700 }}
+              >
+                Instagram
+              </span>
+              <ChevronRight size={14} className="text-white/30 group-hover:text-white transition-colors" />
+            </a>
+          </div>
         </div>
       </nav>
     </>

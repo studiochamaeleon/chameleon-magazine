@@ -93,6 +93,13 @@ export function Header() {
           aria-label="주요 카테고리"
         >
           <Link
+            to="/about"
+            className="px-4 py-2 text-black hover:bg-black hover:text-white transition-colors border-r border-gray-200 focus:outline-none focus:bg-black focus:text-white"
+            style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em' }}
+          >
+            ABOUT
+          </Link>
+          <Link
             to="/category/editors-pick"
             className="px-4 py-2 text-black hover:bg-black hover:text-white transition-colors border-r border-gray-200 focus:outline-none focus:bg-black focus:text-white"
             style={{ fontFamily: 'var(--font-body)', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em' }}

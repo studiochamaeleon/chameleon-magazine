@@ -7,6 +7,7 @@ const apiVersion = process.env.VITE_SANITY_API_VERSION || '2025-08-15';
 
 const staticPages = [
   { path: '/', changefreq: 'daily', priority: '1.0' },
+  { path: '/about', changefreq: 'monthly', priority: '0.7' },
   { path: '/category/editors-pick', changefreq: 'daily', priority: '0.8' },
   { path: '/category/news', changefreq: 'daily', priority: '0.8' },
   { path: '/category/listen', changefreq: 'daily', priority: '0.8' },
