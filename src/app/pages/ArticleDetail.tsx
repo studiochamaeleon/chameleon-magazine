@@ -9,6 +9,9 @@ import { CATEGORY_CONFIGS, Category } from '../data/categories';
 import { urlFor } from '../lib/sanityClient';
 import ChameleonIcon from '../../imports/______2.svg';
 
+const INITIAL_RELATED_COUNT = 3;
+const MAX_RELATED_COUNT = 6;
+
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 }
@@ -200,6 +203,7 @@ export function ArticleDetail() {
   const { id } = useParams<{ id: string }>();
   const { getArticleById, articles } = useArticles();
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [relatedVisible, setRelatedVisible] = useState(INITIAL_RELATED_COUNT);
 
   const article = id ? getArticleById(id) : undefined;
 
@@ -222,6 +226,7 @@ export function ArticleDetail() {
 
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
     setScrollProgress(0);
+    setRelatedVisible(INITIAL_RELATED_COUNT);
     updateProgress();
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll);
@@ -249,10 +254,24 @@ export function ArticleDetail() {
   const coverYouTubeEmbedUrl = article.coverYouTubeUrl ? getYouTubeEmbedUrl(article.coverYouTubeUrl) : null;
   const coverEmbedProvider = article.coverType === 'instagram' ? 'instagram' : 'iframe';
 
-  const relatedArticles = (article.relatedArticles ?? [])
+  const manuallyRelatedArticles = (article.relatedArticles ?? [])
     .map((rid) => getArticleById(rid))
     .filter(Boolean)
-    .slice(0, 3) as typeof articles;
+    .filter((related) => related?.id !== article.id) as typeof articles;
+
+  const articleTagSet = new Set(article.tags.map((tag) => tag.toLowerCase()));
+  const tagMatchedArticles = articles.filter((candidate) => (
+    candidate.id !== article.id &&
+    candidate.tags.some((tag) => articleTagSet.has(tag.toLowerCase()))
+  ));
+  const latestArticles = articles.filter((candidate) => candidate.id !== article.id);
+  const autoRelatedArticles = [...tagMatchedArticles, ...latestArticles].filter(
+    (candidate, index, list) => list.findIndex((item) => item.id === candidate.id) === index
+  );
+  const relatedArticles = (manuallyRelatedArticles.length > 0 ? manuallyRelatedArticles : autoRelatedArticles)
+    .slice(0, MAX_RELATED_COUNT);
+  const visibleRelatedArticles = relatedArticles.slice(0, relatedVisible);
+  const canShowMoreRelated = visibleRelatedArticles.length < relatedArticles.length;
 
   return (
     <>
@@ -426,10 +445,33 @@ export function ArticleDetail() {
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {relatedArticles.map((related) => (
+            {visibleRelatedArticles.map((related) => (
               <ArticleCard key={related.id} article={related} variant="compact" />
             ))}
           </div>
+          {canShowMoreRelated && (
+            <div className="flex items-center justify-center mt-8">
+              <button
+                type="button"
+                onClick={() => setRelatedVisible(MAX_RELATED_COUNT)}
+                className="group px-10 py-3 border border-black bg-white hover:bg-black transition-colors duration-200"
+                style={{ borderRadius: 0, minWidth: 120 }}
+              >
+                <span
+                  className="text-black group-hover:text-white transition-colors"
+                  style={{
+                    fontFamily: 'var(--font-headline)',
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.12em',
+                    lineHeight: 1,
+                  }}
+                >
+                  MORE
+                </span>
+              </button>
+            </div>
+          )}
         </section>
       )}
       </div>
