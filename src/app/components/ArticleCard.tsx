@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { Article } from '../data/articles';
 import { CategoryLabel, EditorPickLabel } from './CategoryLabel';
+import { getArticlePath } from '../lib/articleUrls';
 
 interface ArticleCardProps {
   article: Article;
@@ -13,9 +14,11 @@ function formatDate(dateStr: string): string {
 }
 
 export function ArticleCard({ article, variant = 'standard' }: ArticleCardProps) {
+  const articlePath = getArticlePath(article);
+
   if (variant === 'list') {
     return (
-      <Link to={`/article/${article.id}`} className="block group">
+      <Link to={articlePath} className="block group">
         <article className="py-3 border-b border-gray-200 flex gap-3 items-start hover:bg-gray-50 transition-colors px-1">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
@@ -51,7 +54,7 @@ export function ArticleCard({ article, variant = 'standard' }: ArticleCardProps)
 
   if (variant === 'compact') {
     return (
-      <Link to={`/article/${article.id}`} className="block group">
+      <Link to={articlePath} className="block group">
         <article className="overflow-hidden">
           {article.coverImage && (
             <div className="overflow-hidden bg-gray-50" style={{ aspectRatio: '16/9' }}>
@@ -90,7 +93,7 @@ export function ArticleCard({ article, variant = 'standard' }: ArticleCardProps)
 
   if (variant === 'featured') {
     return (
-      <Link to={`/article/${article.id}`} className="block group h-full">
+      <Link to={articlePath} className="block group h-full">
         <article className="h-full flex flex-col">
           {article.coverImage && (
             <div className="overflow-hidden flex-shrink-0 bg-gray-50" style={{ aspectRatio: '4/3' }}>
@@ -130,7 +133,7 @@ export function ArticleCard({ article, variant = 'standard' }: ArticleCardProps)
 
   // standard
   return (
-    <Link to={`/article/${article.id}`} className="block group">
+    <Link to={articlePath} className="block group">
       <article className="overflow-hidden">
         {article.coverImage && (
           <div className="overflow-hidden bg-gray-50" style={{ aspectRatio: '16/9' }}>

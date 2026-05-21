@@ -25,6 +25,11 @@ export interface Article {
   body: string;
   bodyBlocks?: unknown[];
   relatedArticles?: string[];
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+  seoImage?: string;
+  canonicalUrl?: string;
   status?: 'published' | 'draft' | 'scheduled';
   scheduledAt?: string; // ISO datetime string (예약발행 시각)
 }

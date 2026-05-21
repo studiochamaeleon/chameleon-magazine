@@ -50,8 +50,8 @@ export function ArticleProvider({ children }: { children: React.ReactNode }) {
   // 독자에게 노출되는 기사 — published 상태만
   const articles = allArticles.filter((a) => !a.status || a.status === 'published');
 
-  const getArticleById = (id: string) => allArticles.find((a) => a.id === id);
-  const getArticleBySlug = (slug: string) => allArticles.find((a) => a.slug === slug);
+  const getArticleById = (id: string) => allArticles.find((a) => a.id === id || a.slug === id);
+  const getArticleBySlug = (slug: string) => allArticles.find((a) => a.slug === slug || a.id === slug);
 
   const searchArticles = (query: string) => {
     const q = query.toLowerCase();

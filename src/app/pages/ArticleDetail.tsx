@@ -7,6 +7,7 @@ import { ArticleCard } from '../components/ArticleCard';
 import { CategoryLabel, EditorPickLabel } from '../components/CategoryLabel';
 import { CATEGORY_CONFIGS, Category } from '../data/categories';
 import { urlFor } from '../lib/sanityClient';
+import { getArticlePath } from '../lib/articleUrls';
 import ChameleonIcon from '../../imports/______2.svg';
 
 const INITIAL_RELATED_COUNT = 3;
@@ -199,6 +200,13 @@ const portableTextComponents = {
   },
 };
 
+function setMetaTag(selector: string, attr: 'content' | 'href', value: string) {
+  const element = document.head.querySelector(selector);
+  if (element) {
+    element.setAttribute(attr, value);
+  }
+}
+
 export function ArticleDetail() {
   const { id } = useParams<{ id: string }>();
   const { getArticleById, articles } = useArticles();
@@ -206,6 +214,28 @@ export function ArticleDetail() {
   const [relatedVisible, setRelatedVisible] = useState(INITIAL_RELATED_COUNT);
 
   const article = id ? getArticleById(id) : undefined;
+
+  useEffect(() => {
+    if (!article) return;
+
+    const title = article.seoTitle || `${article.title} | 까멜리온 매거진`;
+    const description = article.seoDescription || article.excerpt;
+    const url = `${window.location.origin}${getArticlePath(article)}`;
+    const image = article.seoImage || article.coverImage || `${window.location.origin}/og-image.png`;
+
+    document.title = title;
+    setMetaTag('meta[name="description"]', 'content', description);
+    setMetaTag('meta[property="og:type"]', 'content', 'article');
+    setMetaTag('meta[property="og:title"]', 'content', title);
+    setMetaTag('meta[property="og:description"]', 'content', description);
+    setMetaTag('meta[property="og:url"]', 'content', url);
+    setMetaTag('meta[property="og:image"]', 'content', image);
+    setMetaTag('meta[property="og:image:secure_url"]', 'content', image);
+    setMetaTag('meta[name="twitter:title"]', 'content', title);
+    setMetaTag('meta[name="twitter:description"]', 'content', description);
+    setMetaTag('meta[name="twitter:image"]', 'content', image);
+    setMetaTag('link[rel="canonical"]', 'href', url);
+  }, [article]);
 
   useEffect(() => {
     let animationFrame = 0;

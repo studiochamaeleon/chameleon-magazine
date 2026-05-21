@@ -4,6 +4,7 @@ import { useArticles } from '../context/ArticleContext';
 import { CategoryLabel, EditorPickLabel } from '../components/CategoryLabel';
 import { ArticleCard } from '../components/ArticleCard';
 import { CATEGORY_CONFIGS, ALL_CATEGORIES } from '../data/categories';
+import { getArticlePath } from '../lib/articleUrls';
 
 const INITIAL_COUNT = 3;
 const LOAD_MORE = 6;
@@ -161,7 +162,7 @@ export function Home() {
               {[...articles.slice(0, 8), ...articles.slice(0, 8)].map((a, i) => (
                 <Link
                   key={`${a.id}-${i}`}
-                  to={`/article/${a.id}`}
+                  to={getArticlePath(a)}
                   className="inline-flex items-center gap-3 text-white hover:text-gray-300 transition-colors px-6"
                   style={{ fontFamily: 'var(--font-body)', fontSize: '0.75rem' }}
                 >
@@ -198,7 +199,7 @@ export function Home() {
           {/* Main Hero — 2 cols */}
           {featured && (
             <Link
-              to={`/article/${featured.id}`}
+              to={getArticlePath(featured)}
               className="md:col-span-2 block group md:pr-7 md:border-r border-black pb-7"
             >
               {featured.coverImage && (
@@ -259,7 +260,7 @@ export function Home() {
               {heroSideArticles.map((article) => (
                 <Link
                   key={article.id}
-                  to={`/article/${article.id}`}
+                  to={getArticlePath(article)}
                   className="group flex gap-3 items-start py-3.5 first:pt-3"
                 >
                   <div className="flex-1 min-w-0">

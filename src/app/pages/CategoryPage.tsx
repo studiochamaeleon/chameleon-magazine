@@ -4,6 +4,7 @@ import { useArticles } from '../context/ArticleContext';
 import { ArticleCard } from '../components/ArticleCard';
 import { CategoryLabel, EditorPickLabel } from '../components/CategoryLabel';
 import { CATEGORY_CONFIGS, Subcategory, Category } from '../data/categories';
+import { getArticlePath } from '../lib/articleUrls';
 
 const INITIAL_BATCH = 9;
 const LOAD_MORE_BATCH = 6;
@@ -89,7 +90,7 @@ function HeroSection({ articles }: { articles: ReturnType<typeof useArticles>['a
     <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border-b border-black pb-8 mb-4">
       {/* Hero Article */}
       <Link
-        to={`/article/${hero.id}`}
+        to={getArticlePath(hero)}
         className="md:col-span-2 block group md:pr-8 md:border-r border-black pb-8 md:pb-0"
       >
         {hero.coverImage && (
@@ -135,7 +136,7 @@ function HeroSection({ articles }: { articles: ReturnType<typeof useArticles>['a
           {sideArticles.map((article) => (
             <Link
               key={article.id}
-              to={`/article/${article.id}`}
+              to={getArticlePath(article)}
               className="group flex gap-3 items-start py-4 first:pt-0"
             >
               <div className="flex-1 min-w-0">

@@ -44,6 +44,7 @@ async function fetchPublishedArticles() {
     !(_id in path("drafts.**"))
   ] | order(publishedAt desc) {
     _id,
+    slug,
     _updatedAt,
     publishedAt
   }`;
@@ -69,7 +70,7 @@ function buildSitemap(articleDocs) {
       priority: page.priority,
     })),
     ...articleDocs.map((article) => ({
-      loc: toUrl(`/article/${article._id}`),
+      loc: toUrl(`/article/${article.slug?.current || article._id}`),
       lastmod: toDate(article._updatedAt || article.publishedAt || new Date()),
       changefreq: 'weekly',
       priority: '0.7',

@@ -26,6 +26,11 @@ interface SanityArticle {
   coverEmbedHeight?: number;
   body?: unknown[];
   relatedArticles?: { _id: string }[];
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+  seoImage?: unknown;
+  canonicalUrl?: string;
 }
 
 const articleProjection = `{
@@ -51,7 +56,12 @@ const articleProjection = `{
   coverEmbedCaption,
   coverEmbedHeight,
   body,
-  relatedArticles[]->{ _id }
+  relatedArticles[]->{ _id },
+  seoTitle,
+  seoDescription,
+  seoKeywords,
+  seoImage,
+  canonicalUrl
 }`;
 
 const publishedArticlesQuery = `*[
@@ -90,6 +100,7 @@ function toArticle(doc: SanityArticle): Article {
   const coverType = doc.coverType ?? 'image';
   const imageCover = doc.coverImage ? urlFor(doc.coverImage).width(1600).auto('format').url() : '';
   const youtubeCover = getYouTubeThumbnail(doc.coverYouTubeUrl);
+  const seoImage = doc.seoImage ? urlFor(doc.seoImage).width(1200).height(630).fit('crop').auto('format').url() : '';
 
   return {
     id: doc._id,
@@ -116,6 +127,11 @@ function toArticle(doc: SanityArticle): Article {
     body: '',
     bodyBlocks: doc.body ?? [],
     relatedArticles: doc.relatedArticles?.map((article) => article._id) ?? [],
+    seoTitle: doc.seoTitle ?? '',
+    seoDescription: doc.seoDescription ?? '',
+    seoKeywords: doc.seoKeywords ?? [],
+    seoImage,
+    canonicalUrl: doc.canonicalUrl ?? '',
     status: 'published',
   };
 }
