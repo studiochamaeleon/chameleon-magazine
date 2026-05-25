@@ -107,13 +107,8 @@ export function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-[50vh] flex items-center justify-center px-6 text-center">
-        <p
-          className="text-black"
-          style={{ fontFamily: 'var(--font-headline)', fontSize: '1rem', fontWeight: 800, letterSpacing: '0.08em' }}
-        >
-          LOADING CHAMELEON MAGAZINE
-        </p>
+      <div className="min-h-[50vh] bg-white" aria-busy="true" aria-live="polite">
+        <span className="sr-only">기사를 불러오는 중입니다.</span>
       </div>
     );
   }

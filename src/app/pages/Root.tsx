@@ -1,10 +1,12 @@
 import { Outlet } from 'react-router';
 import { Header } from '../components/Header';
+import { ChameleonIntro } from '../components/ChameleonIntro';
 import LogoBlack from '../../imports/_______Logo_Black.svg';
 
 export function Root() {
   return (
     <div className="min-h-screen bg-white flex flex-col" style={{ fontFamily: 'var(--font-body)' }}>
+      <ChameleonIntro />
       <Header />
       <main className="flex-1">
         <Outlet />
