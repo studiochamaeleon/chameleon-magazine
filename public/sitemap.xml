@@ -2,45 +2,69 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://magazine.chameleonstudio.xyz/</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://magazine.chameleonstudio.xyz/about/</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://magazine.chameleonstudio.xyz/category/editors-pick/</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://magazine.chameleonstudio.xyz/category/news/</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://magazine.chameleonstudio.xyz/category/listen/</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://magazine.chameleonstudio.xyz/category/visual/</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://magazine.chameleonstudio.xyz/category/culture/</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-05-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://magazine.chameleonstudio.xyz/article/stray-kids-easy-100m/</loc>
+    <lastmod>2026-05-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://magazine.chameleonstudio.xyz/article/aespa-lemonade-comeback-album-guide/</loc>
+    <lastmod>2026-05-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://magazine.chameleonstudio.xyz/article/ama-3/</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://magazine.chameleonstudio.xyz/article/SOMBR-AMA-3/</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://magazine.chameleonstudio.xyz/article/g-dragon/</loc>
@@ -50,7 +74,7 @@
   </url>
   <url>
     <loc>https://magazine.chameleonstudio.xyz/article/dua-lipa-mexico-live/</loc>
-    <lastmod>2026-05-24</lastmod>
+    <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

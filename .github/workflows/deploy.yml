@@ -6,9 +6,8 @@ on:
       - main
   workflow_dispatch:
   schedule:
-    # Refresh Sanity-driven sitemap twice daily.
-    # 00:00/12:00 UTC = 09:00/21:00 Korea Standard Time.
-    - cron: '0 0,12 * * *'
+    # Refresh Sanity-driven SEO pages and sitemap hourly for scheduled articles.
+    - cron: '0 * * * *'
 
 permissions:
   contents: read

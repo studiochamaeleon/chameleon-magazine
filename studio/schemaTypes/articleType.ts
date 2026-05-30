@@ -118,7 +118,8 @@ export const articleType = defineType({
     }),
     defineField({
       name: 'publishedAt',
-      title: 'Published At',
+      title: 'Publish / Scheduled At',
+      description: '현재 시간보다 미래로 설정한 뒤 Publish하면 예약 글로 저장됩니다. 독자 사이트에는 이 시간이 지난 뒤 노출됩니다.',
       type: 'datetime',
       validation: (Rule) => Rule.required(),
     }),

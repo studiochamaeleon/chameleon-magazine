@@ -41,6 +41,7 @@ async function fetchPublishedArticles() {
     _type == "article" &&
     defined(slug.current) &&
     defined(publishedAt) &&
+    dateTime(publishedAt) <= dateTime(now()) &&
     !(_id in path("drafts.**"))
   ] | order(publishedAt desc) {
     _id,
